@@ -30,7 +30,7 @@ function plotInfo(idInput){
       y: otu_y,
       text: otu_label,
       marker: {
-        color: 'blue'},
+        color: 'royalblue'},
         type:"bar",
         orientation: "h",
     };
@@ -107,10 +107,58 @@ function demoInfo(idInput){
   });
   };
 
+  // Bonus 
+  function gauge(idInput){
+    d3.json("samples.json").then((data)=>{
+      var meta=data.metadata;
+      var selectData=meta.filter(m=>m.id===parseInt(idInput))[0];
+      console.log (selectData);
+      var metaWfreq=selectData.wfreq;
+      console.log(metaWfreq);
+
+      var wfreqdata = [
+        {
+          type: "indicator",
+          mode: "gauge+number",
+          value: metaWfreq,
+          title: { text: "Belly Button Wash Frenquency (Scrubs per Week)", font: { size: 18} },
+          gauge: {
+            axis: { range: [0, 9], tickwidth: 1, tickcolor: "darkblue" },
+            bar: { color: "darkblue" },
+            bgcolor: "white",
+            borderwidth: 2,
+            bordercolor: "gray",
+            steps: [
+              { range: [0, 1], color: "powderblue" },
+              { range: [1, 2], color: "lightblue" },
+              { range: [2, 3], color: "lightskyblue"},
+              { range: [3, 4], color: "skyblue" },
+              { range: [4, 5], color: "deepskyblue" },
+              { range: [5, 6], color: "lightsteelblue" },
+              { range: [6, 7], color: "dodgerblue" },
+              { range: [7, 8], color: "cornflowerblue" },
+              { range: [8, 9], color: "	steelblue" }
+            ],
+          }
+        }
+      ];
+      
+      var layout = {
+        width: 500,
+        height: 400,
+        margin: { t: 15, r: 15, l: 15, b: 15 },
+        paper_bgcolor: "lavender",
+        font: { color: "darkblue", family: "Arial" }
+      };
+      
+      Plotly.newPlot('gauge',wfreqdata, layout);
+    });
+  };
   // set up the function for id change
   function optionChanged(idInput){
     plotInfo(idInput);
     demoInfo(idInput);
+    gauge(idInput);
   };
 
   function init(){
@@ -125,6 +173,7 @@ function demoInfo(idInput){
     // call function to display graphics and info 
     plotInfo(data.names[0]);
     demoInfo(data.names[0]);
+    gauge(data.names[0]);
     });
   };
 
